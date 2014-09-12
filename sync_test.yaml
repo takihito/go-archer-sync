@@ -1,0 +1,41 @@
+global:
+  work_dir: /home/koebu/deploy_trunk/
+  dest_dir: /home/koebu/deploy/
+  assets_path: /home/koebu/archer/assets/
+  xassets_path: /home/koebu/archer/assets/
+
+tasks:
+  init:
+    - module: Confirm
+      name: confirm
+      config:
+        msg: "really deploy aws? (/home/koebu/deploy/koebu.com/lib)  [y/n]"
+  process:
+    - module: Rsync
+      name: deploy_fcgi
+      config:
+        user: koebu
+        source: "[% work_dir %]/[% project %]"
+        dest: "[% server %]:[% dest_dir %]"
+        dry-run: []
+        archive:  1
+        compress: 1
+        rsh:      ssh
+        update:   1
+        verbose:  1
+        delete:   0
+        progress: 1
+        include: []
+        exclude: []
+        filter: ['+ lib', '- .svn', '- koebu.com/*']
+
+projects:
+  koebu.com:
+    servers:
+      - koebu-app001c
+      - koebu-app002c
+      - koebu-app003b
+      - koebu-app004b
+      - koebu-worker001c
+      - koebu-worker002b
+
