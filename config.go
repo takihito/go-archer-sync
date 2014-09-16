@@ -8,17 +8,6 @@ import (
         "gopkg.in/yaml.v1"
 )
 
-type RsyncOption struct {
-    Archive bool
-    Update bool
-    Compress bool
-    Delete bool
-    Exclude []string
-    Rsh string
-    Source string
-    Dest string
-    Dry_run bool
-}
 
 type ArcherSync struct {
     Global GLOBAL
@@ -48,46 +37,40 @@ type INIT []struct {
 type PROCESS []struct {
     Module string
     Name string
-    Config map[string] string
+    Config CONFIG
+}
+
+type CONFIG struct {
+    User string
+    Source string
+    Dest string
+    Dry_run string
+    DryRun string
+    Archive string
+    Compress string
+    Rsh string
+    Update string
+    Verbose string
+    Delete string
+    Progress string
+    Include []string
+    Exclude []string
+    Filter []string
 }
 
 func ParseConf(yamlFile string) (*ArcherSync, error) {
-//    rsyncOption := RsyncOption{
-//        Archive:  true,
-//        Update:   true,
-//        Compress: true,
-//        Delete:   true,
-//        Rsh:      "ssh",
-//        Dry_run:  true,
-//    }
     archerSync := ArcherSync{}
 
-//    flag.StringVar(&yamlFile, "config", "sync.yaml", "yaml file")
     yamlString, err := ioutil.ReadFile(yamlFile)
     if err != nil {
         log.Fatalf("error: ioutil.ReadFile(yamlFile),  %v", err)
     }
 
-//    log.Printf("start deploy project:%s", yamlString)
-//    log.Printf("start deploy project:%v", rsyncOption)
-
     err = yaml.Unmarshal([]byte(yamlString), &archerSync)
     if err != nil {
         log.Fatalf("error: yaml.Unmarshal, %v", err)
     }
-/*
-    for _, value := range archerSync.Tasks.Process {
-        for option, ovalue := range value.Config {
-            fmt.Printf("option:%v value:%v\n", option, ovalue)
-        }
-    }
 
-    for host, servers := range archerSync.Projects {
-        for _, server := range servers["servers"] {
-            fmt.Printf("host:%s server:%s\n", host ,server)
-        }
-    }
-*/
     log.Printf("start parse config_yaml.")
     return &archerSync, err;
 }
