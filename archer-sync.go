@@ -5,28 +5,18 @@ import (
     "fmt"
 )
 
-//    rsyncOption := RsyncOption{
-//        Archive:  true,
-//        Update:   true,
-//        Compress: true,
-//        Delete:   true,
-//        Rsh:      "ssh",
-//        Dry_run:  true,
-//    }
-
 func main() {
 
-    archerSync, err := ParseConf("sync_test.yaml")
+    rsyncOption, err := ParseConf("sync_test.yaml")
 
     if err != nil {
             log.Fatalf("error: %v", err)
     }
 
-    msg := Rsync(archerSync)
-
-    log.Printf("main:%v\n", archerSync)
+    msg := Rsync(rsyncOption)
+    log.Printf("main:%v\n", rsyncOption)
     log.Printf("\nmsg:%s\n", msg)
-    fmt.Printf(">>>>>>> WORK_DIR:%v\n", archerSync.Global.Work_dir)
+    fmt.Printf(">>>>>>> WORK_DIR")
 
 }
 
