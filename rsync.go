@@ -26,7 +26,7 @@ func Rsync(rsyncOption *RsyncOption) (msg string) {
         rsyncCmd = append(rsyncCmd, "--delete" )
     }
     if (rsyncOption.Dry_run) {
-        rsyncCmd = append(rsyncCmd, "--dry_run" )
+        rsyncCmd = append(rsyncCmd, "--dry-run" )
     }
     if (rsyncOption.Verbose) {
         rsyncCmd = append(rsyncCmd, "--verbose" )
@@ -51,7 +51,7 @@ func Rsync(rsyncOption *RsyncOption) (msg string) {
     }
 
     rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s", rsyncOption.Source))
-    rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s", rsyncOption.Dest))
+    rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s@%s", rsyncOption.User, rsyncOption.Dest))
     fmt.Printf("XXXXXXXXX %v\n", rsyncCmd )
 
     cmd := exec.Command("date")

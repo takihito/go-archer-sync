@@ -15,7 +15,7 @@ tasks:
       name: deploy_fcgi
       config:
         user: app
-        source: "[% work_dir %]/[% project %]"
+        source: "[% work_dir %][% project %]"
         dest: "[% server %]:[% dest_dir %]"
 #        dry-run: []
         dry_run: 1
@@ -27,7 +27,7 @@ tasks:
         delete:   0
         progress: 1
         include: ['aaaa','bbbb']
-        exclude: []
+        exclude: ['xxxx']
         filter: ['+ lib', '- .svn', '- app.com/*']
 
 projects:

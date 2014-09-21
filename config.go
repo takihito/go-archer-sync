@@ -75,7 +75,7 @@ type CONFIG struct {
     Filter []string
 }
 
-func ParseConf(yamlFile string) (*RsyncOption, error) {
+func ParseConf(yamlFile string) (*RsyncOption, map[string] map[string] []string, error) {
     archerSync := ArcherSync{}
 
     yamlString, err := ioutil.ReadFile(yamlFile)
@@ -133,6 +133,10 @@ func ParseConf(yamlFile string) (*RsyncOption, error) {
             rsyncOption.Filter = value.Config.Filter
         }
 
+        if (len(value.Config.User) > 0) {
+            rsyncOption.User = value.Config.User
+        }
+
         if (len(value.Config.Source) > 0) {
             rsyncOption.Source = value.Config.Source
             rsyncOption.Source = strings.Replace(rsyncOption.Source, "[% work_dir %]", WorkDir, -1)
@@ -144,6 +148,6 @@ func ParseConf(yamlFile string) (*RsyncOption, error) {
     }
 
     log.Printf("start parse config_yaml.")
-    return &rsyncOption, err;
+    return &rsyncOption, archerSync.Projects, err;
 }
 
