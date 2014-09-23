@@ -10,7 +10,7 @@ func main() {
     var parallelFlag int
     var yamlConfigFlag string
     flag.IntVar(&parallelFlag, "parallel", 2, "parallel worker")
-    flag.StringVar(&yamlConfigFlag, "config", "deploy.yaml", "yaml confige file")
+    flag.StringVar(&yamlConfigFlag, "config", "deploy_config.yaml", "yaml confige file")
     flag.Parse()
 
     rsyncOption, projects, err := ParseConf(yamlConfigFlag)
