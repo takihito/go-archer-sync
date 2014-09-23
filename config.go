@@ -100,8 +100,8 @@ func ParseConf(yamlFile string) (*RsyncOption, map[string] map[string] []string,
     var WorkDir = archerSync.Global.Work_dir
     var DestDir = archerSync.Global.Dest_dir
     for _, value := range archerSync.Tasks.Process {
-        if (value.Config.Dry_run == "1") {
-            rsyncOption.Dry_run = true
+        if (value.Config.Dry_run != "1") {
+            rsyncOption.Dry_run = false
         }
         if (value.Config.Archive == "1") {
             rsyncOption.Archive = true

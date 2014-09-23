@@ -3,7 +3,6 @@ package main
 import (
     "log"
     "fmt"
-    "time"
     "strings"
     "os/exec"
 )
@@ -11,7 +10,6 @@ import (
 func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string) {
 
     var rsyncCmd [] string
-    rsyncCmd = append(rsyncCmd, "rsync" )
     if (rsyncOption.Archive) {
         rsyncCmd = append(rsyncCmd, "--archive" )
     }
@@ -37,35 +35,37 @@ func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string)
         rsyncCmd = append(rsyncCmd, fmt.Sprintf("--rsh=%s", rsyncOption.Rsh))
     }
 
+/* includeとexcludeが有効にならない? */
     for i := range rsyncOption.Include {
-        rsyncCmd = append(rsyncCmd, fmt.Sprintf("--include=\"%s\"", rsyncOption.Include[i]))
+        rsyncCmd = append(rsyncCmd, fmt.Sprintf("--include='%s'", rsyncOption.Include[i]))
     }
 
     for i := range rsyncOption.Exclude {
-        rsyncCmd = append(rsyncCmd, fmt.Sprintf("--exclude=\"%s\"", rsyncOption.Exclude[i]))
+        rsyncCmd = append(rsyncCmd, fmt.Sprintf("--exclude='%s'", rsyncOption.Exclude[i]))
     }
 
+/*
+    filterは原因不明のエラーとなる
     for i := range rsyncOption.Filter {
         rsyncCmd = append(rsyncCmd, fmt.Sprintf("--filter=\"%s\"", rsyncOption.Filter[i]))
     }
-
+*/
     source := strings.Replace(rsyncOption.Source, "[% project %]", project, -1)
     rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s", source))
     dest := strings.Replace(rsyncOption.Dest, "[% server %]", server, -1)
     rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s@%s", rsyncOption.User, dest))
 
-fmt.Printf("command%v, project:%s, server:%s\n", rsyncCmd, project, server)
-time.Sleep( time.Duration(2) * time.Second )
+    log.Printf("project:%s, server:%s, command%v\n", rsyncCmd, project, server)
 
-    cmd := exec.Command("date")
-    cmd.Args = []string {"-u"}
+    cmd := exec.Command("rsync", rsyncCmd...)
     stdout, err := cmd.Output()
     if err != nil {
-        log.Fatalf("error: cmd.Output, %v", err)
+        log.Fatalf("error: deploy. server:%s, Output:%v", server, err)
     }
     cmd.Run()
+
     result := string(stdout)
 
-    return fmt.Sprintf("%s", result)
+    return result
 }
 
