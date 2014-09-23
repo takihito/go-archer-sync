@@ -3,13 +3,12 @@ package main
 import (
     "log"
     "fmt"
-//    "strings"
-//    "os"
+    "time"
+    "strings"
     "os/exec"
 )
 
-
-func Rsync(rsyncOption *RsyncOption) (msg string) {
+func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string) {
 
     var rsyncCmd [] string
     rsyncCmd = append(rsyncCmd, "rsync" )
@@ -50,9 +49,13 @@ func Rsync(rsyncOption *RsyncOption) (msg string) {
         rsyncCmd = append(rsyncCmd, fmt.Sprintf("--filter=\"%s\"", rsyncOption.Filter[i]))
     }
 
-    rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s", rsyncOption.Source))
-    rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s@%s", rsyncOption.User, rsyncOption.Dest))
-    fmt.Printf("XXXXXXXXX %v\n", rsyncCmd )
+    source := strings.Replace(rsyncOption.Source, "[% project %]", project, -1)
+    rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s", source))
+    dest := strings.Replace(rsyncOption.Dest, "[% server %]", server, -1)
+    rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s@%s", rsyncOption.User, dest))
+
+fmt.Printf("command%v, project:%s, server:%s\n", rsyncCmd, project, server)
+time.Sleep( time.Duration(2) * time.Second )
 
     cmd := exec.Command("date")
     cmd.Args = []string {"-u"}
@@ -61,7 +64,8 @@ func Rsync(rsyncOption *RsyncOption) (msg string) {
         log.Fatalf("error: cmd.Output, %v", err)
     }
     cmd.Run()
+    result := string(stdout)
 
-    return string(stdout)
+    return fmt.Sprintf("%s", result)
 }
 

@@ -2,8 +2,6 @@ package main
 
 import (
         "io/ioutil"
-//        "flag"
-//        "fmt"
         "strings"
         "log"
         "gopkg.in/yaml.v1"
