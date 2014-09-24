@@ -10,6 +10,7 @@ import (
 func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string) {
 
     var rsyncCmd [] string
+    rsyncCmd = append(rsyncCmd, "rsync" )
     if (rsyncOption.Archive) {
         rsyncCmd = append(rsyncCmd, "--archive" )
     }
@@ -35,7 +36,6 @@ func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string)
         rsyncCmd = append(rsyncCmd, fmt.Sprintf("--rsh=%s", rsyncOption.Rsh))
     }
 
-/* includeとexcludeが有効にならない? */
     for i := range rsyncOption.Include {
         rsyncCmd = append(rsyncCmd, fmt.Sprintf("--include='%s'", rsyncOption.Include[i]))
     }
@@ -43,21 +43,24 @@ func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string)
     for i := range rsyncOption.Exclude {
         rsyncCmd = append(rsyncCmd, fmt.Sprintf("--exclude='%s'", rsyncOption.Exclude[i]))
     }
+    rsyncCmd = append(rsyncCmd, "-v")
 
-/*
-    filterは原因不明のエラーとなる
     for i := range rsyncOption.Filter {
         rsyncCmd = append(rsyncCmd, fmt.Sprintf("--filter=\"%s\"", rsyncOption.Filter[i]))
     }
-*/
+
     source := strings.Replace(rsyncOption.Source, "[% project %]", project, -1)
     rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s", source))
     dest := strings.Replace(rsyncOption.Dest, "[% server %]", server, -1)
     rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s@%s", rsyncOption.User, dest))
 
-    log.Printf("project:%s, server:%s, command%v\n", rsyncCmd, project, server)
+    rsync_cli := strings.Join(rsyncCmd, " ");
+    log.Printf("cmd:%s, server:%s, command%v\n", rsync_cli, project, server)
 
+    /* 直接渡すと --(include|exclude|filter)=PATTERN が動かないのでshell経由で渡す
     cmd := exec.Command("rsync", rsyncCmd...)
+    */
+    cmd := exec.Command("sh", "-c", rsync_cli)
     stdout, err := cmd.Output()
     if err != nil {
         log.Fatalf("error: deploy. server:%s, Output:%v", server, err)
