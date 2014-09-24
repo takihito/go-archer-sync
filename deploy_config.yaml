@@ -1,8 +1,6 @@
 global:
   work_dir: /home/deploy_trunk/
   dest_dir: /home/deploy/
-  assets_path: /home/archer/assets/
-  xassets_path: /home/archer/assets/
 
 tasks:
   init:
