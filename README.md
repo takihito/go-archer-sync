@@ -27,7 +27,7 @@ See sample (deploy_config.yaml).
 SEE ALSO
 ------
 
-(Archer)[https://github.com/tokuhirom/Archer]
+[Archer](https://github.com/tokuhirom/Archer)
 
 Author
 ------
