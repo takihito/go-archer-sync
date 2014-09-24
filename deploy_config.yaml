@@ -7,7 +7,7 @@ tasks:
     - module: Confirm
       name: confirm
       config:
-        msg: "really deploy app? (/home/deploy/example.com/lib)  [y/n]"
+        msg: "really deploy app? [y/n]"
 
   process:
     - module: Rsync
@@ -24,20 +24,20 @@ tasks:
         verbose:  1
         delete:   0
         progress: 1
-        include: ['aaaa','bbbb']
-        exclude: ['xxxx']
-        filter: ['+ lib', '- .svn', '- app.com/*']
+        include: ['*.pl','*.cgi']
+        exclude: ['*']
+        filter: ['+ lib', '- .svn']
 
 projects:
   example.com:
     servers:
-      - app001c
-      - app002c
-      - app003b
-      - app004b
-      - worker001c
-      - worker002b
-  example.comx:
+      - app001
+      - app002
+      - app003
+      - app004
+      - worker001
+      - worker002
+  xyz.localhost:
     servers:
       - db001
       - db002
