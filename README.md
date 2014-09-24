@@ -6,11 +6,7 @@ go-archer-sync
 Usage
 -----
 
-build and run
-
 ```
-$ go build ./*.go
-
 $ archer-sync --help
 
 Usage of ./archer-sync:
@@ -20,22 +16,60 @@ Usage of ./archer-sync:
 $ archer-sync --config=sample.yaml --parallel=2
 ```
 
-config yaml
+## Example Config
 
-See sample (deploy_config.yaml).
+```
+global:
+  work_dir: /home/deploy_trunk/
+  dest_dir: /home/deploy/
+
+tasks:
+  init:
+    - module: Confirm
+      name: confirm
+      config:
+        msg: "really deploy app? [y/n]"
+
+  process:
+    - module: Rsync
+      name: deploy_app
+      config:
+        user: akihito
+        source: "[% work_dir %][% project %]"
+        dest: "[% server %]:[% dest_dir %]"
+        dry_run: 0
+        archive:  1
+        compress: 1
+        rsh:      ssh
+        update:   1
+        verbose:  1
+        delete:   0
+        progress: 1
+        include: ['*/','*.go']
+        exclude: ['*']
+        filter: ['+ lib', '- .svn', '- tmp/*']
+
+projects:
+  example.com:
+    servers:
+      - app001
+      - app002
+      - app003
+```
+
 
 SEE ALSO
 ------
 
 [Archer](https://github.com/tokuhirom/Archer)
 
-Author
-------
-
-takeda akihito <takeda.akihito@gmail.com>
-
 LICENCE
 -------
 
-The MIT License (MIT)
+MIT
+
+Author
+------
+
+Takeda Akihito <takeda.akihito@gmail.com>
 
