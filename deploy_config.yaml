@@ -1,0 +1,46 @@
+global:
+  work_dir: /home/deploy_trunk/
+  dest_dir: /home/deploy/
+  assets_path: /home/archer/assets/
+  xassets_path: /home/archer/assets/
+
+tasks:
+  init:
+    - module: Confirm
+      name: confirm
+      config:
+        msg: "really deploy app? (/home/deploy/example.com/lib)  [y/n]"
+
+  process:
+    - module: Rsync
+      name: deploy_plack
+      config:
+        user: app
+        source: "[% work_dir %][% project %]"
+        dest: "[% server %]:[% dest_dir %]"
+        dry_run: 1
+        archive:  1
+        compress: 1
+        rsh:      ssh
+        update:   1
+        verbose:  1
+        delete:   0
+        progress: 1
+        include: ['aaaa','bbbb']
+        exclude: ['xxxx']
+        filter: ['+ lib', '- .svn', '- app.com/*']
+
+projects:
+  example.com:
+    servers:
+      - app001c
+      - app002c
+      - app003b
+      - app004b
+      - worker001c
+      - worker002b
+  example.comx:
+    servers:
+      - db001
+      - db002
+
