@@ -8,6 +8,7 @@ import (
 )
 
 type RsyncOption struct {
+    InitMessage string
     Archive bool
     Update bool
     Compress bool
@@ -44,9 +45,10 @@ type TASKS struct {
 type INIT []struct {
     Module string
     Name string
-    Config struct {
-        msg string
-    }
+    Config map[string] string
+//    Config struct {
+//        msg string
+//    }
 }
 
 type PROCESS []struct {
@@ -99,6 +101,9 @@ func ParseConf(yamlFile string) (*RsyncOption, map[string] map[string] []string,
 
     var WorkDir = archerSync.Global.Work_dir
     var DestDir = archerSync.Global.Dest_dir
+    for _, value := range archerSync.Tasks.Init {
+        rsyncOption.InitMessage = value.Config["msg"]
+    }
     for _, value := range archerSync.Tasks.Process {
         if (value.Config.Dry_run != "1") {
             rsyncOption.Dry_run = false
@@ -145,7 +150,7 @@ func ParseConf(yamlFile string) (*RsyncOption, map[string] map[string] []string,
         }
     }
 
-    log.Printf("start parse config_yaml.")
+//    log.Printf("start parse config_yaml.")
     return &rsyncOption, archerSync.Projects, err;
 }
 

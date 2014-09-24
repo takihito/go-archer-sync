@@ -14,6 +14,8 @@ Usage of ./archer-sync:
   -parallel=2: parallel worker
 
 $ archer-sync --config=sample.yaml --parallel=2
+> really deploy app? [y/n]:
+
 ```
 
 ## Example Config

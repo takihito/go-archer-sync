@@ -3,6 +3,8 @@ package main
 import (
     "log"
     "flag"
+    "fmt"
+    "os"
 )
 
 func main() {
@@ -14,9 +16,15 @@ func main() {
     flag.Parse()
 
     rsyncOption, projects, err := ParseConf(yamlConfigFlag)
-
     if err != nil {
             log.Fatalf("error: %v", err)
+    }
+
+    var yn string
+    fmt.Printf("> %s:", rsyncOption.InitMessage)
+    fmt.Scan(&yn)
+    if (yn != "y") {
+        os.Exit(0)
     }
 
     for project, servers := range projects {
