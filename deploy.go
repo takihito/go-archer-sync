@@ -52,10 +52,8 @@ func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string)
 
     rsyncCmd = append(rsyncCmd, "-v")
 
-    source := strings.Replace(rsyncOption.Source, "[% project %]", project, -1)
-    rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s", source))
-    dest := strings.Replace(rsyncOption.Dest, "[% server %]", server, -1)
-    rsyncCmd = append(rsyncCmd, fmt.Sprintf("%s@%s", rsyncOption.User, dest))
+    rsyncCmd = append(rsyncCmd, rsyncOption.ProjectSource(project))
+    rsyncCmd = append(rsyncCmd, rsyncOption.ServerDest(server))
 
     rsync_cli := strings.Join(rsyncCmd, " ");
     log.Printf("cmd:%s, server:%s, command%v\n", rsync_cli, project, server)
