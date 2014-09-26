@@ -25,6 +25,16 @@ type RsyncOption struct {
     Dest string
 }
 
+func (r *RsyncOption) ProjectSource(project string) string {
+    source := strings.Replace(r.Source, "[% project %]", project, -1)
+    return source
+}
+
+func (r *RsyncOption) ServerDest(server string) string {
+    dest := strings.Replace(r.Dest, "[% server %]", server, -1)
+    return dest
+}
+
 type ArcherSync struct {
     Global GLOBAL
     Tasks TASKS
@@ -46,9 +56,6 @@ type INIT []struct {
     Module string
     Name string
     Config map[string] string
-//    Config struct {
-//        msg string
-//    }
 }
 
 type PROCESS []struct {
@@ -150,7 +157,6 @@ func ParseConf(yamlFile string) (*RsyncOption, map[string] map[string] []string,
         }
     }
 
-//    log.Printf("start parse config_yaml.")
     return &rsyncOption, archerSync.Projects, err;
 }
 
