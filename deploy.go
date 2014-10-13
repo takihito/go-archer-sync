@@ -22,7 +22,7 @@ func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string)
     if (rsyncOption.Delete) {
         rsyncCmd = append(rsyncCmd, "--delete" )
     }
-    if (rsyncOption.Dry_run) {
+    if (rsyncOption.DryRun) {
         rsyncCmd = append(rsyncCmd, "--dry-run" )
     }
     if (rsyncOption.Verbose) {
