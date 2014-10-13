@@ -15,7 +15,7 @@ type RsyncOption struct {
     Verbose bool
     Delete bool
     Progress bool
-    Dry_run bool
+    DryRun bool
     Include []string
     Exclude []string
     Filter []string
@@ -42,9 +42,8 @@ type ArcherSync struct {
 }
 
 type GLOBAL struct {
-    Work_dir string
-    Dest_dir string
-    Assets_path string
+    WorkDir string	`yaml:"work_dir"`
+    DestDir string	`yaml:"dest_dir"`
 }
 
 type TASKS struct {
@@ -68,8 +67,8 @@ type CONFIG struct {
     User string
     Source string
     Dest string
-    Dry_run string
-    DryRun string
+    DryRun string	`yaml:dry_run`
+//    DryRun string
     Archive string
     Compress string
     Rsh string
@@ -103,17 +102,17 @@ func ParseConf(yamlFile string) (*RsyncOption, map[string] map[string] []string,
         Delete:   true,
         Progress: true,
         Rsh:      "ssh",
-        Dry_run:  true,
+        DryRun:  true,
     }
 
-    var WorkDir = archerSync.Global.Work_dir
-    var DestDir = archerSync.Global.Dest_dir
+    var WorkDir = archerSync.Global.WorkDir
+    var DestDir = archerSync.Global.DestDir
     for _, value := range archerSync.Tasks.Init {
         rsyncOption.InitMessage = value.Config["msg"]
     }
     for _, value := range archerSync.Tasks.Process {
-        if (value.Config.Dry_run != "1") {
-            rsyncOption.Dry_run = false
+        if (value.Config.DryRun != "1") {
+            rsyncOption.DryRun = false
         }
         if (value.Config.Archive == "1") {
             rsyncOption.Archive = true
