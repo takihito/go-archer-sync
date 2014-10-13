@@ -7,6 +7,16 @@ Usage
 -----
 
 ```
+git clone git@github.com:takihito/go-archer-sync.git
+go get
+```
+
+or
+
+Download [binary](https://github.com/takihito/go-archer-sync/releases)
+
+
+```
 $ archer-sync --help
 
 Usage of ./archer-sync:
