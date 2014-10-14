@@ -8,7 +8,6 @@ import (
 )
 
 func Rsync(rsyncOption *RsyncOption, project string, server string) (msg string) {
-
 	var rsyncCmd []string
 	if rsyncOption.Archive {
 		rsyncCmd = append(rsyncCmd, "--archive")
